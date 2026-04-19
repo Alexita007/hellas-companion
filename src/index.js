@@ -111,13 +111,15 @@ app.post('/chat', async (req, res) => {
       const varDominante = extraerVariableDominante(messages);
       const conversacionCompleta = JSON.stringify(messages.slice(-10));
 
-      await supabase.from('aplicantes').insert({
+      const { error: sbError } = await supabase.from('aplicantes').insert({
         candidato_id: candidatoId,
         idioma: isSpanish ? 'es' : 'en',
         variable_dominante: varDominante,
         resumen_kupan: replyText.slice(0, 500),
         conversacion: conversacionCompleta,
       });
+      if (sbError) console.error('Supabase insert error:', sbError);
+      else console.log('Supabase: registro guardado OK');
     }
 
     return res.json({
