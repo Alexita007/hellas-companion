@@ -105,7 +105,7 @@ app.post('/chat', async (req, res) => {
     const replyText = extractTextFromContent(response.content);
 
     // Guardar en Supabase si la evaluación está completa
-    if (detectarEvaluacionCompleta(messages) && process.env.SUPABASE_URL) {
+    if (messages.length >= 3 && process.env.SUPABASE_URL) {
       const allText = messages.map(m => typeof m.content === 'string' ? m.content : '').join(' ');
       const isSpanish = /[áéíóúüñ]/i.test(allText);
       const varDominante = extraerVariableDominante(messages);
